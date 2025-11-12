@@ -27,6 +27,7 @@ if (!app.Environment.IsProduction())
 
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+app.UseDefaultFiles(); // Enable default file mapping (e.g., index.html)
 app.UseStaticFiles(); // Enable serving static files
 app.UseRouting();
 //app.UseAuthentication();
