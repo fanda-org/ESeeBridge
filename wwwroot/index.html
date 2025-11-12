@@ -4,113 +4,124 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-See Bridge</title>
-    <!--<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>-->
-    <!--<link rel="stylesheet" href="tailwind.css" />-->
     <script src="tailwindcss.js"></script>
+    <script src="alpine.min.js" defer></script>
 </head>
-<body class="flex flex-col justify-center items-center h-screen">
-    <h1 class="text-3xl font-bold">
-        E-See Bridge
-    </h1>
-
-    <div class="container flex flex-col lg:flex-row bg-gray-50 rounded shadow-md gap-5">
-        <div class="flex flex-col w-full lg:w-1/2 gap-5 p-5">
-            <h1 class="text-2xl font-semibold">
-                Information
-            </h1>
-            <div class="flex flex-row gap-5">
-                <div class="flex flex-col w-full">
-                    <label>Machine Name:</label>
-                    <input type="text" id="machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly value="BALA-ASUS-LAPTOP" />
-                </div>
-                <div class="flex flex-col w-full">
-                    <label>IP Address:</label>
-                    <input type="text" id="ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="192.168.1.37" readonly />
+<body class="flex justify-center items-center min-h-screen bg-blue-100">
+    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5">
+        <h1 class="text-3xl text-center font-bold bg-white pb-5">
+            E-See Bridge
+        </h1>
+        <hr class="border-gray-400 mx-auto pb-2" />
+        <div class="flex flex-col lg:flex-row gap-5">
+            <div class="flex flex-col w-full gap-1"
+                 x-data="{ info: {machineName: '', ipAddress: '', servicePort: 5200, listenerPort: -1}}"
+                 x-init="info = await (await fetch('api/e-see/info')).json()">
+                <h1 class="text-xl font-semibold">Information</h1>
+                <div class="grid md:grid-cols-2 gap-2">
+                    <div class="flex flex-col flex-grow">
+                        <label>Machine Name:</label>
+                        <input type="text" x-model="info.machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    </div>
+                    <div class="flex flex-col flex-grow">
+                        <label>IP Address:</label>
+                        <input type="text" x-model="info.ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    </div>
+                    <div class="flex flex-col flex-grow">
+                        <label>Service Port:</label>
+                        <input type="text" x-model="info.bridgeServicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    </div>
+                    <div class="flex flex-col flex-grow">
+                        <label>Listener Port:</label>
+                        <input type="text" x-model="info.listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-row gap-5">
-                <div class="flex flex-col w-full">
-                    <label>Service Port:</label>
-                    <input type="text" id="servicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="5200" readonly />
-                </div>
-                <div class="flex flex-col w-full">
-                    <label>Listener Port:</label>
-                    <input type="text" id="listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="4" readonly />
+            <div class="flex flex-col w-full gap-5">
+                <div class="space-y-1">
+                    <h1 class="text-xl font-semibold">Diagnose</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 gap-y-2 md:gap-2">
+                        <div class="flex flex-col">
+                            <label>Patient ID:</label>
+                            <input type="text" id="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="202039" />
+                        </div>
+                        <div class="flex flex-col w-full justify-end">
+                            <button id="sendButton" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition">Send</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col w-full lg:w-1/2 gap-2 p-5">
-            <h1 class="text-2xl font-semibold">
-                Diagnose
-            </h1>
-            <div class="flex flex-row gap-5">
-                <div class="flex flex-row gap-2 w-full">
-                    <div class="flex flex-col w-full">
-                        <label>Patient ID:</label>
-                        <input type="text" id="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="202039" />
-                    </div>
-                    <div class="flex flex-col w-full justify-end">
-                        <button id="sendButton" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 rounded cursor-pointer">Send</button>
-                    </div>
-                </div>
-            </div>
-            <h1 class="text-2xl font-semibold">
-                Results
-            </h1>
-            <div class="flex flex-row gap-5">
-                <div class="flex flex-col w-full">
+        <!--<hr class="border-gray-400 mx-auto mt-5 mb-3" />-->
+        <div class="space-y-2 mt-5">
+            <h1 class="text-xl font-semibold">Results</h1>
+            <div class="flex flex-wrap gap-x-3 w-full">
+                <div class="flex flex-col flex-grow">
                     <label>Date:</label>
-                    <input type="text" id="diagDate" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" id="diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
-                <div class="flex flex-col w-full">
+                <div class="flex flex-col flex-grow">
                     <label>Device Name:</label>
-                    <input type="text" id="deviceName" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" id="deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
-                <div class="flex flex-col w-full">
+                <div class="flex flex-col flex-grow">
                     <label>Device Serial #:</label>
-                    <input type="text" id="deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" id="deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
             </div>
-            <h2 class="text-1xl font-semibold">Right Eye:</h2>
-            <div class="flex flex-row w-full">
-                <div class="flex flex-col w-2/8">
-                    <label>Sphere</label>
-                    <input type="text" id="r-sphere" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Cylinder</label>
-                    <input type="text" id="r-cyl" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Axis</label>
-                    <input type="text" id="r-axis" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Spherical Equivalent</label>
-                    <input type="text" id="r-sphequi" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-            </div>
-            <h2 class="text-1xl font-semibold">Left Eye:</h2>
-            <div class="flex flex-row w-full">
-                <div class="flex flex-col w-2/8">
-                    <label>Sphere</label>
-                    <input type="text" id="l-sphere" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Cylinder</label>
-                    <input type="text" id="l-cyl" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Axis</label>
-                    <input type="text" id="l-axis" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col w-2/8">
-                    <label>Spherical Equivalent</label>
-                    <input type="text" id="l-sphequi" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
+            <div class="overflow-x-auto border border-gray-400 rounded">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Sphere</th>
+                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Cylinder</th>
+                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Axis</th>
+                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Sph.Equi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="py-2 text-gray-600 font-semibold text-center">Right Eye</td>
+                        </tr>
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">John Michael</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Manager</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                        </tr>
+                        <!--<tr class="hover:bg-gray-100">
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Alexa Liras</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Developer</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                    </tr>-->
+                        <tr>
+                            <td colspan="4" class="py-2 text-gray-600 font-semibold text-center">Left Eye</td>
+                        </tr>
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">John Michael</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Manager</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                        </tr>
+                        <!--<tr class="hover:bg-gray-100">
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Alexa Liras</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Developer</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
+                    </tr>-->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+    <style>
+        label {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: oklch(27.8% 0.033 256.848);
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
             // Your JavaScript code here will execute once the DOM is ready.
@@ -119,7 +130,7 @@
                 //alert("Button clicked!");
                 await sendAndReceivePatientInfo();
             });
-            await fetchInfo(); // Call the function to fetch data when the page loads
+            // await fetchInfo(); // Call the function to fetch data when the page loads
         });
 
         async function sendAndReceivePatientInfo() {
