@@ -1,0 +1,196 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-See Bridge</title>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>-->
+    <!--<link rel="stylesheet" href="tailwind.css" />-->
+    <script src="tailwindcss.js"></script>
+</head>
+<body class="flex flex-col justify-center items-center h-screen">
+    <h1 class="text-3xl font-bold">
+        E-See Bridge
+    </h1>
+
+    <div class="container flex flex-col lg:flex-row bg-gray-50 rounded shadow-md gap-5">
+        <div class="flex flex-col w-full lg:w-1/2 gap-5 p-5">
+            <h1 class="text-2xl font-semibold">
+                Information
+            </h1>
+            <div class="flex flex-row gap-5">
+                <div class="flex flex-col w-full">
+                    <label>Machine Name:</label>
+                    <input type="text" id="machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly value="BALA-ASUS-LAPTOP" />
+                </div>
+                <div class="flex flex-col w-full">
+                    <label>IP Address:</label>
+                    <input type="text" id="ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="192.168.1.37" readonly />
+                </div>
+            </div>
+            <div class="flex flex-row gap-5">
+                <div class="flex flex-col w-full">
+                    <label>Service Port:</label>
+                    <input type="text" id="servicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="5200" readonly />
+                </div>
+                <div class="flex flex-col w-full">
+                    <label>Listener Port:</label>
+                    <input type="text" id="listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="4" readonly />
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col w-full lg:w-1/2 gap-2 p-5">
+            <h1 class="text-2xl font-semibold">
+                Diagnose
+            </h1>
+            <div class="flex flex-row gap-5">
+                <div class="flex flex-row gap-2 w-full">
+                    <div class="flex flex-col w-full">
+                        <label>Patient ID:</label>
+                        <input type="text" id="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="202039" />
+                    </div>
+                    <div class="flex flex-col w-full justify-end">
+                        <button id="sendButton" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 rounded cursor-pointer">Send</button>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-2xl font-semibold">
+                Results
+            </h1>
+            <div class="flex flex-row gap-5">
+                <div class="flex flex-col w-full">
+                    <label>Date:</label>
+                    <input type="text" id="diagDate" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-full">
+                    <label>Device Name:</label>
+                    <input type="text" id="deviceName" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-full">
+                    <label>Device Serial #:</label>
+                    <input type="text" id="deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+            </div>
+            <h2 class="text-1xl font-semibold">Right Eye:</h2>
+            <div class="flex flex-row w-full">
+                <div class="flex flex-col w-2/8">
+                    <label>Sphere</label>
+                    <input type="text" id="r-sphere" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Cylinder</label>
+                    <input type="text" id="r-cyl" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Axis</label>
+                    <input type="text" id="r-axis" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Spherical Equivalent</label>
+                    <input type="text" id="r-sphequi" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+            </div>
+            <h2 class="text-1xl font-semibold">Left Eye:</h2>
+            <div class="flex flex-row w-full">
+                <div class="flex flex-col w-2/8">
+                    <label>Sphere</label>
+                    <input type="text" id="l-sphere" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Cylinder</label>
+                    <input type="text" id="l-cyl" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Axis</label>
+                    <input type="text" id="l-axis" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+                <div class="flex flex-col w-2/8">
+                    <label>Spherical Equivalent</label>
+                    <input type="text" id="l-sphequi" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            // Your JavaScript code here will execute once the DOM is ready.
+            // For example, to add a click handler to a button with ID "myButton":
+            document.getElementById("sendButton").addEventListener("click", async function () {
+                //alert("Button clicked!");
+                await sendAndReceivePatientInfo();
+            });
+            await fetchInfo(); // Call the function to fetch data when the page loads
+        });
+
+        async function sendAndReceivePatientInfo() {
+            const url = 'api/e-see/send-receive';
+
+            try {
+                const postData = {
+                    id: document.getElementById("patientId").value,
+                    name: "",
+                    age: 1,
+                    gender: "male"
+                };
+
+                const options = {
+                    method: 'POST', // Specify the HTTP method as POST
+                    headers: {
+                        'Content-Type': 'application/json', // Indicate that the body is JSON
+                    },
+                    body: JSON.stringify(postData), // Convert the JavaScript object to a JSON string
+                };
+
+                //const response = await fetch(url);
+                const response = await fetch(url, options);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json(); // Assuming the API returns JSON
+                console.log(data);
+                document.getElementById("diagDate").value = data.diagDate;
+                document.getElementById("deviceName").value = data.deviceName;
+                document.getElementById("deviceSerialNumber").value = data.deviceSerialNumber;
+                // right
+                document.getElementById("r-sphere").value = data.rightEyeResult.sphere;
+                document.getElementById("r-cyl").value = data.rightEyeResult.cylinder;
+                document.getElementById("r-axis").value = data.rightEyeResult.axis;
+                document.getElementById("r-sphequi").value = data.rightEyeResult.sphericalEquivalent;
+                // left
+                document.getElementById("l-sphere").value = data.leftEyeResult.sphere;
+                document.getElementById("l-cyl").value = data.leftEyeResult.cylinder;
+                document.getElementById("l-axis").value = data.leftEyeResult.axis;
+                document.getElementById("l-sphequi").value = data.leftEyeResult.sphericalEquivalent;
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                dataContainer.innerHTML = `<p style="color: red;">Failed to load data: ${error.message}</p>`;
+            }
+        }
+
+        async function fetchInfo() {
+            const url = 'api/e-see/info';
+
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json(); // Assuming the API returns JSON
+                console.log(data);
+                document.getElementById("machineName").value = data.machineName;
+                document.getElementById("ipAddress").value = data.ipAddress;
+                document.getElementById("servicePort").value = data.bridgeServicePort;
+                document.getElementById("listenerPort").value = data.listenerPort;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                dataContainer.innerHTML = `<p style="color: red;">Failed to load data: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

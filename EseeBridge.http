@@ -1,0 +1,6 @@
+@EseeBridge_HostAddress = http://localhost:5144
+
+GET {{EseeBridge_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

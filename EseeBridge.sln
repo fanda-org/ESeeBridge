@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EseeBridge", "EseeBridge.csproj", "{A627D8A6-4279-B02F-087E-8352EE7F0829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A627D8A6-4279-B02F-087E-8352EE7F0829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A627D8A6-4279-B02F-087E-8352EE7F0829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A627D8A6-4279-B02F-087E-8352EE7F0829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A627D8A6-4279-B02F-087E-8352EE7F0829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4FD321F-B604-4353-8AB9-BC37FA48C2EB}
+	EndGlobalSection
+EndGlobal
