@@ -8,7 +8,7 @@
     <script src="alpine.min.js" defer></script>
 </head>
 <body class="flex justify-center items-center min-h-screen bg-blue-100">
-    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5">
+    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5" x-data="{ patientId: '', result: {}, isLoading: false, isShow: false }">
         <h1 class="text-3xl text-center font-bold bg-white pb-5">
             E-See Bridge
         </h1>
@@ -43,10 +43,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 gap-y-2 md:gap-2">
                         <div class="flex flex-col">
                             <label>Patient ID:</label>
-                            <input type="text" id="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" value="202039" />
+                            <input type="text" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" />
                         </div>
                         <div class="flex flex-col w-full justify-end">
-                            <button id="sendButton" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition">Send</button>
+                            <button x-bind:disabled="patientId.trim() === ''" @click="isLoading=true; const pt = {id: patientId, name: '', age: 1, gender: ''}; console.log(pt); result = await (await fetch('api/e-see/send-receive', {method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pt)} )).json()" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition">Send</button>
                         </div>
                     </div>
                 </div>
@@ -54,25 +54,27 @@
         </div>
         <!--<hr class="border-gray-400 mx-auto mt-5 mb-3" />-->
         <div class="space-y-2 mt-5">
-            <h1 class="text-xl font-semibold">Results</h1>
-            <div class="flex flex-wrap gap-x-3 w-full">
+            <h1 class="text-xl font-semibold" x-show="isLoading">Results</h1>
+            <h1 x-show="isLoading">Loading...</h1>
+            <div class="flex flex-wrap gap-x-3 w-full" x-show="isShow">
                 <div class="flex flex-col flex-grow">
                     <label>Date:</label>
-                    <input type="text" id="diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" x-model="result.diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
                 <div class="flex flex-col flex-grow">
                     <label>Device Name:</label>
-                    <input type="text" id="deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" x-model="result.deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
                 <div class="flex flex-col flex-grow">
                     <label>Device Serial #:</label>
-                    <input type="text" id="deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <input type="text" x-model="result.deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
             </div>
-            <div class="overflow-x-auto border border-gray-400 rounded">
+            <div class="overflow-x-auto border border-gray-400 rounded" x-show="isShow">
                 <table class="min-w-full bg-white">
                     <thead>
                         <tr class="bg-gray-100">
+                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Test #</th>
                             <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Sphere</th>
                             <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Cylinder</th>
                             <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Axis</th>
@@ -81,35 +83,29 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="4" class="py-2 text-gray-600 font-semibold text-center">Right Eye</td>
+                            <td colspan="5" class="py-2 text-gray-600 font-semibold text-center">Right Eye</td>
                         </tr>
-                        <tr class="hover:bg-gray-100">
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">John Michael</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Manager</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                        </tr>
-                        <!--<tr class="hover:bg-gray-100">
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Alexa Liras</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Developer</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                    </tr>-->
+                        <template x-for="reResult in result.rightEyeResults" :key="reResult.testNumber">
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.testNumber"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.sphere"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.cylinder"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.axis"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.sphericalEquivalent"></td>
+                            </tr>
+                        </template>
                         <tr>
-                            <td colspan="4" class="py-2 text-gray-600 font-semibold text-center">Left Eye</td>
+                            <td colspan="5" class="py-2 text-gray-600 font-semibold text-center">Left Eye</td>
                         </tr>
-                        <tr class="hover:bg-gray-100">
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">John Michael</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Manager</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                            <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                        </tr>
-                        <!--<tr class="hover:bg-gray-100">
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Alexa Liras</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">Developer</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                        <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400">23/04/18</td>
-                    </tr>-->
+                        <template x-for="leResult in result.leftEyeResults" :key="leResult.testNumber">
+                            <tr class="hover:bg-gray-100">
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.testNumber"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.sphere"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.cylinder"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.axis"></td>
+                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.sphericalEquivalent"></td>
+                            </tr>
+                        </template>
                     </tbody>
                 </table>
             </div>
@@ -122,7 +118,7 @@
             color: oklch(27.8% 0.033 256.848);
         }
     </style>
-    <script>
+    <!--<script>
         document.addEventListener("DOMContentLoaded", async function () {
             // Your JavaScript code here will execute once the DOM is ready.
             // For example, to add a click handler to a button with ID "myButton":
@@ -202,6 +198,6 @@
                 dataContainer.innerHTML = `<p style="color: red;">Failed to load data: ${error.message}</p>`;
             }
         }
-    </script>
+    </script>-->
 </body>
 </html>
