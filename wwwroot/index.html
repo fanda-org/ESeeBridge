@@ -46,7 +46,7 @@
                             <input type="text" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" />
                         </div>
                         <div class="flex flex-col w-full justify-end">
-                            <button x-bind:disabled="patientId.trim() === ''" @click="isLoading=true; const pt = {id: patientId, name: '', age: 1, gender: ''}; console.log(pt); result = await (await fetch('api/e-see/send-receive', {method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pt)} )).json()" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition">Send</button>
+                            <button x-bind:disabled="patientId.trim() === ''" @click="isLoading=true; result={}; const pt = {id: patientId, name: '', age: 1, gender: ''}; console.log(pt); result = await (await fetch('api/e-see/send-receive', {method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pt)} )).json()" class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition">Send</button>
                         </div>
                     </div>
                 </div>
@@ -54,9 +54,9 @@
         </div>
         <!--<hr class="border-gray-400 mx-auto mt-5 mb-3" />-->
         <div class="space-y-2 mt-5">
-            <h1 class="text-xl font-semibold" x-show="isLoading">Results</h1>
-            <h1 x-show="isLoading">Loading...</h1>
-            <div class="flex flex-wrap gap-x-3 w-full" x-show="isShow">
+            <h1 class="text-xl font-semibold">Results</h1>
+            <!--<h1 x-show="isLoading">Loading...</h1>-->
+            <div class="flex flex-wrap gap-x-3 w-full">
                 <div class="flex flex-col flex-grow">
                     <label>Date:</label>
                     <input type="text" x-model="result.diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
@@ -70,7 +70,7 @@
                     <input type="text" x-model="result.deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
             </div>
-            <div class="overflow-x-auto border border-gray-400 rounded" x-show="isShow">
+            <div class="overflow-x-auto border border-gray-400 rounded">
                 <table class="min-w-full bg-white">
                     <thead>
                         <tr class="bg-gray-100">
