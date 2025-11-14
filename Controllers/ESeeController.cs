@@ -18,10 +18,10 @@ public class ESeeController(IEseeBluetoothBridgeService bridge) : ControllerBase
         return Ok(_bridge.GetInfo());
     }
 
-    [HttpPost("send-receive")]
-    public IActionResult SendAndReceive([FromBody] PatientRequest patient, CancellationToken token)
+    [HttpPost("send-receive/{patientId}")]
+    public IActionResult SendAndReceive(string patientId, CancellationToken token)
     {
-        var result = _bridge.SendAndReceive(patient, token);
+        var result = _bridge.SendAndReceive(patientId, token);
 
         if (result is null)
             return StatusCode(504, "No response received from E-SEE device.");

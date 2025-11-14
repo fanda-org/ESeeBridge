@@ -6,34 +6,33 @@
     <title>E-See Bridge</title>
     <script src="tailwindcss.min.js"></script>
     <script src="alpine.min.js" defer></script>
+    <script src="index.js"></script>
 </head>
-<body class="flex justify-center items-center min-h-screen bg-blue-100">
-    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5" x-data="{ patientId: '', result: {}, isLoading: false, isShow: false }">
+<body class="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-300 to-purple-300">
+    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5" x-data="esee">
         <h1 class="text-3xl text-center font-bold pb-5">
             E-See Bridge
         </h1>
-        <hr class="border-gray-400 mx-auto pb-2" />
+        <hr class="border-blue-300 mx-auto pb-2" />
         <div class="flex flex-col lg:flex-row gap-5">
-            <div class="flex flex-col w-full gap-1"
-                 x-data="{ info: {machineName: '', ipAddress: '', servicePort: 5200, listenerPort: -1}}"
-                 x-init="info = await (await fetch('api/e-see/info', {method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM=' }})).json()">
+            <div class="flex flex-col w-full gap-1">
                 <h1 class="text-xl font-semibold">Information</h1>
                 <div class="grid md:grid-cols-2 gap-2">
                     <div class="flex flex-col flex-grow">
-                        <label>Machine Name:</label>
-                        <input type="text" x-model="info.machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                        <label for="machineName" accesskey="m"><u>M</u>achine Name:</label>
+                        <input type="text" id="machineName" x-model="info.machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                     </div>
                     <div class="flex flex-col flex-grow">
-                        <label>IP Address:</label>
-                        <input type="text" x-model="info.ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                        <label for="ipAddress" accesskey="i"><u>I</u>P Address:</label>
+                        <input type="text" id="ipAddress" x-model="info.ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                     </div>
                     <div class="flex flex-col flex-grow">
-                        <label>Service Port:</label>
-                        <input type="text" x-model="info.bridgeServicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                        <label for="servicePort" accesskey="s"><u>S</u>ervice Port:</label>
+                        <input type="text" id="servicePort" x-model="info.bridgeServicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                     </div>
                     <div class="flex flex-col flex-grow">
-                        <label>Listener Port:</label>
-                        <input type="text" x-model="info.listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                        <label for="listenerPort" accesskey="l"><u>L</u>istener Port:</label>
+                        <input type="text" id="listenerPort" x-model="info.listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                     </div>
                 </div>
             </div>
@@ -42,11 +41,11 @@
                     <h1 class="text-xl font-semibold">Diagnose</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 gap-y-2 md:gap-2">
                         <div class="flex flex-col">
-                            <label>Patient ID:</label>
-                            <input type="text" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" autofocus />
+                            <label for="patientId" accesskey="p"><u>P</u>atient ID:</label>
+                            <input type="text" id="patientId" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" autofocus />
                         </div>
                         <div class="flex flex-col w-full justify-end">
-                            <button x-bind:disabled="patientId.trim() === '' || isLoading" @click="isLoading=true; result={}; const pt = {id: patientId, name: '', age: 1, gender: ''}; result = await (await fetch('api/e-see/send-receive', {method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM=' }, body: JSON.stringify(pt)} )).json(); isLoading=false;"
+                            <button x-bind:disabled="patientId.trim() === '' || isLoading" @click="getResults"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
                                 Send
                             </button>
@@ -59,16 +58,16 @@
             <h1 class="text-xl font-semibold">Results</h1>
             <div class="flex flex-wrap gap-x-3 w-full">
                 <div class="flex flex-col flex-grow">
-                    <label>Date:</label>
-                    <input type="text" x-model="result.diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <label for="diagDate" accesskey="t">Da<u>t</u>e:</label>
+                    <input type="text" id="diagDate" x-model="result.diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
                 <div class="flex flex-col flex-grow">
-                    <label>Device Name:</label>
-                    <input type="text" x-model="result.deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <label for="deviceName" accesskey="n">Device <u>N</u>ame:</label>
+                    <input type="text" id="deviceName" x-model="result.deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
                 <div class="flex flex-col flex-grow">
-                    <label>Device Serial #:</label>
-                    <input type="text" x-model="result.deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
+                    <label for="deviceSerialNumber" accesskey="v">De<u>v</u>ice Serial #:</label>
+                    <input type="text" id="deviceSerialNumber" x-model="result.deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
                 </div>
             </div>
             <div class="overflow-x-auto border border-gray-400 rounded">

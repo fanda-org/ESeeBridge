@@ -14,7 +14,7 @@ public interface IEseeBluetoothBridgeService
 {
     BridgeInfo GetInfo();
 
-    PatientResult? SendAndReceive(PatientRequest patient, CancellationToken token);
+    PatientResult? SendAndReceive(string patientId, CancellationToken token);
 
     void StopListener();
 }
@@ -68,12 +68,12 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
         }
     }
 
-    public PatientResult? SendAndReceive(PatientRequest patient, CancellationToken token)
+    public PatientResult? SendAndReceive(string patientId, CancellationToken token)
     {
         try
         {
             StartListener();
-            WritePatinetInfo(patient.Id, token);
+            WritePatinetInfo(patientId, token);
             var result = ReadPatientResult(token);
             return result;
         }
