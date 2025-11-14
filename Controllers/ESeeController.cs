@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EseeBridge.Controllers;
 
-//[Authorize]
+[Authorize(AuthenticationSchemes = "BasicAuthentication")]
 [ApiController]
 [Route("api/e-see")]
 public class ESeeController(IEseeBluetoothBridgeService bridge) : ControllerBase

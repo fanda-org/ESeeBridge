@@ -1,4 +1,7 @@
+using EseeBridge.Auth;
 using EseeBridge.Services;
+
+using Microsoft.AspNetCore.Authentication;
 
 using Scalar.AspNetCore;
 
@@ -17,6 +20,9 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Services(services)
     .Enrich.FromLogContext()); // Or other sinks like File, Seq, etc.
 
+builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsProduction())
@@ -30,8 +36,8 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles(); // Enable default file mapping (e.g., index.html)
 app.UseStaticFiles(); // Enable serving static files
 app.UseRouting();
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
