@@ -21,10 +21,6 @@ public class ESeeController(IEseeBluetoothBridgeService bridge) : ControllerBase
     [HttpPost("send-receive")]
     public IActionResult SendAndReceive([FromBody] PatientRequest patient, CancellationToken token)
     {
-        /// deviceAddress could come from config or database
-        /// string deviceAddress = "00:1A:7D:DA:71:13";
-        /// string patientInfo = $"{patient.Id}|{patient.Name}|{patient.Age}|{patient.Gender}";
-
         var result = _bridge.SendAndReceive(patient, token);
 
         if (result is null)
