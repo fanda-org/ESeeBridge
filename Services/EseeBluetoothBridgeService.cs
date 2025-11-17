@@ -14,7 +14,7 @@ public interface IEseeBluetoothBridgeService
 {
     BridgeInfo GetInfo();
 
-    PatientResult? SendAndReceive(string patientId, CancellationToken token);
+    PatientResult? SendAndReceive(Patient patient, CancellationToken token);
 
     void StopListener();
 }
@@ -26,6 +26,24 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
 
     private readonly ILogger<EseeBluetoothBridgeService> _logger = logger;
     private readonly TimeSpan _readTimeout = TimeSpan.FromMinutes(10);
+
+    public void StartListener()
+    {
+        if (!_isRunning)
+        {
+            // Create Bluetooth listener
+            var serviceGuid = BluetoothService.SerialPort;
+            _listener = new BluetoothListener(serviceGuid)
+            {
+                ServiceName = "E-SEE Bluetooth Service"
+            };
+            _listener.Start();
+            _isRunning = true;
+
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Bluetooth listener started on service GUID: {Guid}", serviceGuid);
+        }
+    }
 
     public BridgeInfo GetInfo()
     {
@@ -50,30 +68,12 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
             ListenerPort: port);
     }
 
-    public void StartListener()
-    {
-        if (!_isRunning)
-        {
-            // Create Bluetooth listener
-            var serviceGuid = BluetoothService.SerialPort;
-            _listener = new BluetoothListener(serviceGuid)
-            {
-                ServiceName = "E-SEE Bluetooth Service"
-            };
-            _listener.Start();
-            _isRunning = true;
-
-            if (_logger.IsEnabled(LogLevel.Information))
-                _logger.LogInformation("Bluetooth listener started on service GUID: {Guid}", serviceGuid);
-        }
-    }
-
-    public PatientResult? SendAndReceive(string patientId, CancellationToken token)
+    public PatientResult? SendAndReceive(Patient patient, CancellationToken token)
     {
         try
         {
             StartListener();
-            WritePatinetInfo(patientId, token);
+            WritePatinetInfo(patient, token);
             var result = ReadPatientResult(token);
             return result;
         }
@@ -91,7 +91,7 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
         _listener.Stop();
     }
 
-    private void WritePatinetInfo(string patientId, CancellationToken token)
+    private void WritePatinetInfo(Patient patient, CancellationToken token)
     {
         var start = DateTime.UtcNow;
 
@@ -105,11 +105,13 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
                     using Stream stream = client.GetStream();
                     if (stream is not null && stream.CanWrite)
                     {
-                        byte[] data = Encoding.ASCII.GetBytes(patientId);
+                        //string patientInfo = $"{patient.PatientId}\n{patient.PatientName}";
+                        string patientInfo = patient.PatientId;
+                        byte[] data = Encoding.ASCII.GetBytes(patientInfo);
                         stream.Write(data, 0, data.Length);
                         stream.Flush();
                         if (_logger.IsEnabled(LogLevel.Information))
-                            _logger.LogInformation("Sent patient info: id={patientId}", patientId);
+                            _logger.LogInformation("Sent patient info: id={PatientId}, name={PatientName}", patient.PatientId, patient.PatientName);
                         break;
                     }
                 }

@@ -30,30 +30,32 @@ document.addEventListener('alpine:init', () => {
             try {
                 this.isLoading = true;
                 this.result = {};
-
-                const response = await fetch(`api/e-see/send-receive/${this.patientId}`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM='
-                        }
-                    });
-                this.result = await response.json();
+                if (this.patientId) {
+                    const response = await fetch(`api/e-see/send-receive/${this.patientId}`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM='
+                            }
+                        });
+                    this.result = await response.json();
+                }
             }
             catch (error) {
                 console.error('Error fetching results:', error);
             }
             finally {
-                this.isLoading = true;
+                this.isLoading = false;
+                console.log("Diagnose completed");
             }
         },
 
         // Optional: init() method for initialization logic
         async init() {
-            console.log('esee component initialized!');
             // Perform actions when the component is created
             await this.getInfo();
+            console.log('esee component initialized!');
         }
     }));
 });
