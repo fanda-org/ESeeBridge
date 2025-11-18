@@ -36,23 +36,28 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col w-full gap-5">
-                <div class="space-y-1">
-                    <h1 class="text-xl font-semibold">Diagnose</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-0 gap-y-2 md:gap-2">
-                        <div class="flex flex-col">
-                            <label for="patientId" accesskey="p"><u>P</u>atient ID:</label>
-                            <input type="text" id="patientId" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" autofocus />
-                        </div>
-                        <div class="flex flex-col w-full justify-end">
-                            <button x-bind:disabled="isLoading" @click="getResults()"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
-                                Send
-                            </button>
-                        </div>
+            <form class="flex flex-col w-full gap-1">
+                <!--<form class="space-y-1">-->
+                <h1 class="text-xl font-semibold">Diagnose</h1>
+                <div class="grid md:grid-cols-2 gap-2">
+                    <div class="flex flex-col flex-grow">
+                        <label for="patientId" accesskey="p"><u>P</u>atient ID:</label>
+                        <input type="text" id="patientId" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" autofocus required />
+                    </div>
+                    <div class="flex flex-col flex-grow">
+                        <label for="patientName" accesskey="a">P<u>a</u>tient Name:</label>
+                        <input type="text" id="patientName" x-model="patientName" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" />
+                    </div>
+                    <div class="flex flex-col flex-grow col-span-2">
+                        <!--<label>&nbsp;</label>-->
+                        <button x-bind:disabled="isLoading" @click="getResults"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
+                            Send
+                        </button>
                     </div>
                 </div>
-            </div>
+                <!--</form>-->
+            </form>
         </div>
         <div class="space-y-2 mt-5">
             <h1 class="text-xl font-semibold">Results</h1>

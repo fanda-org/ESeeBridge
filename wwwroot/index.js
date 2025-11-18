@@ -4,6 +4,7 @@ document.addEventListener('alpine:init', () => {
         // Initial data properties
         info: { machineName: '', ipAddress: '', servicePort: 5200, listenerPort: -1 },
         patientId: '',
+        patientName: '',
         result: {},
         isLoading: false,
 
@@ -26,19 +27,27 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        async getResults() {
+        async getResults(event) {
+            event.preventDefault();
+
+            if (!this.patientId)
+                return;
+
             try {
                 this.isLoading = true;
                 this.result = {};
                 if (this.patientId) {
-                    const response = await fetch(`api/e-see/send-receive/${this.patientId}`,
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM='
-                            }
-                        });
+                    const data = { patientId: this.patientId, patientName: this.patientName };
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Basic ZXNlZS1icmlkZ2U6QiF0OWF6aVM=',
+                        },
+                        body: JSON.stringify(data)
+                    };
+
+                    const response = await fetch(`api/e-see/send-receive`, requestOptions);
                     this.result = await response.json();
                 }
             }

@@ -25,7 +25,8 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
     private bool _isRunning = false;
 
     private readonly ILogger<EseeBluetoothBridgeService> _logger = logger;
-    private readonly TimeSpan _readTimeout = TimeSpan.FromMinutes(10);
+    private readonly TimeSpan _writeTimeout = TimeSpan.FromMinutes(5);
+    private readonly TimeSpan _readTimeout = TimeSpan.FromMinutes(15);
 
     public void StartListener()
     {
@@ -95,7 +96,7 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
     {
         var start = DateTime.UtcNow;
 
-        while ((DateTime.UtcNow - start) < _readTimeout && !token.IsCancellationRequested && _isRunning)
+        while ((DateTime.UtcNow - start) < _writeTimeout && !token.IsCancellationRequested && _isRunning)
         {
             if (_listener.Pending())
             {
