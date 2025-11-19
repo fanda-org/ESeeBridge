@@ -48,22 +48,34 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
 
     public BridgeInfo GetInfo()
     {
-        StartListener();
-        // To get the dynamically assigned RFCOMM channel number (port)
-        // The ServiceRecord property is populated after Start() is called
-        ServiceRecord serviceRecord = _listener.ServiceRecord;
-
-        // Use ServiceRecordHelper to extract the channel number
-        int port = ServiceRecordHelper.GetRfcommChannelNumber(serviceRecord);
-
+        // var hostname = Dns.GetHostAddresses(Dns.GetHostName())!
+        //                   .FirstOrDefault(ha => ha.AddressFamily == AddressFamily.InterNetwork)!
+        //                   .ToString();
+        var hostName = Dns.GetHostName();
         if (_logger.IsEnabled(LogLevel.Information))
-            _logger.LogInformation("Bluetooth listener is using RFCOMM channel (port): {Port}", port);
-
-        IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            _logger.LogInformation("Hostname resolved to IP address: {IPAddress}", hostName.ToString());
+        IPHostEntry ipHostInfo = Dns.GetHostEntry(hostName);
         IPAddress? ipAddress = ipHostInfo.AddressList.FirstOrDefault(a => a.AddressFamily == AddressFamily.InterNetwork);
 
+        int port = -1;
+
+        try
+        {
+            StartListener();
+            // To get the dynamically assigned RFCOMM channel number (port)
+            // The ServiceRecord property is populated after Start() is called
+            ServiceRecord serviceRecord = _listener.ServiceRecord;
+
+            // Use ServiceRecordHelper to extract the channel number
+            port = ServiceRecordHelper.GetRfcommChannelNumber(serviceRecord);
+
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Bluetooth listener is using RFCOMM channel (port): {Port}", port);
+        }
+        catch { }
+        // _logger.LogInformation("Machine name: {hostName}", hostName.ToString());
         return new BridgeInfo(
-            MachineName: Environment.MachineName,
+            MachineName: hostName.ToString(), //Environment.MachineName,
             IPAddress: ipAddress?.ToString(),
             BridgeServicePort: 5200,
             ListenerPort: port);
@@ -74,7 +86,7 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
         try
         {
             StartListener();
-            WritePatinetInfo(patient, token);
+            WritePatientInfo(patient, token);
             var result = ReadPatientResult(token);
             return result;
         }
@@ -92,7 +104,7 @@ public class EseeBluetoothBridgeService(ILogger<EseeBluetoothBridgeService> logg
         _listener.Stop();
     }
 
-    private void WritePatinetInfo(Patient patient, CancellationToken token)
+    private void WritePatientInfo(Patient patient, CancellationToken token)
     {
         var start = DateTime.UtcNow;
 

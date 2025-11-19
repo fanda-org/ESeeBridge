@@ -1,128 +1,268 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-See Bridge</title>
     <script src="tailwindcss.min.js"></script>
     <script src="alpine.min.js" defer></script>
     <script src="index.js"></script>
-</head>
-<body class="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-300 to-purple-300">
-    <div class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5" x-data="esee">
-        <h1 class="text-3xl text-center font-bold pb-5">
-            E-See Bridge
-        </h1>
-        <!--<hr class="border-blue-400 mx-auto pb-2 mb-2" />-->
-        <div class="flex flex-col lg:flex-row gap-5">
-            <div class="flex flex-col w-full gap-1 border border-blue-400 p-4 rounded">
-                <h1 class="text-xl font-semibold">Information</h1>
-                <div class="grid md:grid-cols-2 gap-2">
-                    <div class="flex flex-col flex-grow">
-                        <label for="machineName" accesskey="m"><u>M</u>achine Name:</label>
-                        <input type="text" id="machineName" x-model="info.machineName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                    </div>
-                    <div class="flex flex-col flex-grow">
-                        <label for="ipAddress" accesskey="i"><u>I</u>P Address:</label>
-                        <input type="text" id="ipAddress" x-model="info.ipAddress" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                    </div>
-                    <div class="flex flex-col flex-grow">
-                        <label for="servicePort" accesskey="s"><u>S</u>ervice Port:</label>
-                        <input type="text" id="servicePort" x-model="info.bridgeServicePort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                    </div>
-                    <div class="flex flex-col flex-grow">
-                        <label for="listenerPort" accesskey="l"><u>L</u>istener Port:</label>
-                        <input type="text" id="listenerPort" x-model="info.listenerPort" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                    </div>
-                </div>
+  </head>
+  <body
+    class="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-300 to-purple-300"
+  >
+    <div
+      class="container bg-gray-50 rounded-lg shadow-md overflow-hidden p-5"
+      x-data="esee"
+    >
+      <h1 class="text-3xl text-center font-bold pb-5">E-See Bridge</h1>
+      <!--<hr class="border-blue-400 mx-auto pb-2 mb-2" />-->
+      <div class="flex flex-col lg:flex-row gap-5">
+        <div
+          class="flex flex-col w-full gap-1 border-2 border-gray-400 p-4 rounded"
+        >
+          <h1 class="text-xl font-semibold">Information</h1>
+          <div class="grid md:grid-cols-2 gap-3">
+            <div class="flex flex-col flex-grow">
+              <label for="machineName" accesskey="m"
+                ><u>M</u>achine Name:</label
+              >
+              <input
+                type="text"
+                id="machineName"
+                x-model="info.machineName"
+                class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+                readonly
+              />
             </div>
-            <form class="flex flex-col w-full gap-1 border border-blue-400 p-4 rounded">
-                <!--<form class="space-y-1">-->
-                <h1 class="text-xl font-semibold">Diagnose</h1>
-                <div class="grid md:grid-cols-2 gap-2">
-                    <div class="flex flex-col flex-grow">
-                        <label for="patientId" accesskey="p"><u>P</u>atient ID:</label>
-                        <input type="text" id="patientId" x-model="patientId" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" autofocus required />
-                    </div>
-                    <div class="flex flex-col flex-grow">
-                        <label for="patientName" accesskey="a">P<u>a</u>tient Name:</label>
-                        <input type="text" id="patientName" x-model="patientName" class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" />
-                    </div>
-                    <div class="flex flex-col flex-grow col-span-2">
-                        <!--<label>&nbsp;</label>-->
-                        <button x-bind:disabled="isLoading" @click="getResults"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">
-                            Send
-                        </button>
-                    </div>
-                </div>
-                <!--</form>-->
-            </form>
+            <div class="flex flex-col flex-grow">
+              <label for="ipAddress" accesskey="i"><u>I</u>P Address:</label>
+              <input
+                type="text"
+                id="ipAddress"
+                x-model="info.ipAddress"
+                class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+                readonly
+              />
+            </div>
+            <div class="flex flex-col flex-grow">
+              <label for="servicePort" accesskey="s"
+                ><u>S</u>ervice Port:</label
+              >
+              <input
+                type="text"
+                id="servicePort"
+                x-model="info.bridgeServicePort"
+                class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+                readonly
+              />
+            </div>
+            <div class="flex flex-col flex-grow">
+              <label for="listenerPort" accesskey="l"
+                ><u>L</u>istener Port:</label
+              >
+              <input
+                type="text"
+                id="listenerPort"
+                x-model="info.listenerPort"
+                class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+                readonly
+              />
+            </div>
+          </div>
         </div>
-        <div class="space-y-2 mt-5 border border-blue-400 p-4 rounded">
-            <h1 class="text-xl font-semibold">Results</h1>
-            <div class="flex flex-wrap gap-x-3 w-full">
-                <div class="flex flex-col flex-grow">
-                    <label for="diagDate" accesskey="t">Da<u>t</u>e:</label>
-                    <input type="text" id="diagDate" x-model="result.diagDate" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col flex-grow">
-                    <label for="deviceName" accesskey="n">Device <u>N</u>ame:</label>
-                    <input type="text" id="deviceName" x-model="result.deviceName" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
-                <div class="flex flex-col flex-grow">
-                    <label for="deviceSerialNumber" accesskey="v">De<u>v</u>ice Serial #:</label>
-                    <input type="text" id="deviceSerialNumber" x-model="result.deviceSerialNumber" class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500" readonly />
-                </div>
+        <form
+          class="flex flex-col w-full gap-1 border-2 border-gray-400 p-4 rounded"
+        >
+          <!--<form class="space-y-1">-->
+          <h1 class="text-xl font-semibold">Diagnose</h1>
+          <div class="grid md:grid-cols-2 gap-3">
+            <div class="flex flex-col flex-grow">
+              <label for="patientId" accesskey="p"><u>P</u>atient ID:</label>
+              <input
+                type="text"
+                id="patientId"
+                x-model="patientId"
+                class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+                autofocus
+                required
+              />
             </div>
-            <div class="overflow-x-auto border border-gray-400 rounded">
-                <table class="min-w-full bg-white">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Test #</th>
-                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Sphere</th>
-                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Cylinder</th>
-                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Axis</th>
-                            <th class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400">Sph.Equi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="5" class="py-2 text-gray-600 font-semibold text-center">Right Eye</td>
-                        </tr>
-                        <template x-for="reResult in result.rightEyeResults" :key="reResult.testNumber">
-                            <tr class="hover:bg-gray-100">
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.testNumber"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.sphere"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.cylinder"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.axis"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="reResult.sphericalEquivalent"></td>
-                            </tr>
-                        </template>
-                        <tr>
-                            <td colspan="5" class="py-2 text-gray-600 font-semibold text-center">Left Eye</td>
-                        </tr>
-                        <template x-for="leResult in result.leftEyeResults" :key="leResult.testNumber">
-                            <tr class="hover:bg-gray-100">
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.testNumber"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.sphere"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.cylinder"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.axis"></td>
-                                <td class="py-2 px-2 whitespace-nowrap border-b border-gray-400" x-text="leResult.sphericalEquivalent"></td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
+            <div class="flex flex-col flex-grow">
+              <label for="patientName" accesskey="a"
+                >P<u>a</u>tient Name:</label
+              >
+              <input
+                type="text"
+                id="patientName"
+                x-model="patientName"
+                class="border border-gray-400 rounded px-2 py-1 bg-white text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+              />
             </div>
+            <div class="flex flex-col flex-grow col-span-2">
+              <!--<label>&nbsp;</label>-->
+              <button
+                x-bind:disabled="isLoading"
+                @click="getResults"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-semibold h-9 rounded cursor-pointer transition disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+          <!--</form>-->
+        </form>
+      </div>
+      <div class="space-y-2 mt-5 border-2 border-gray-400 p-4 rounded">
+        <h1 class="text-xl font-semibold">Results</h1>
+        <div class="flex flex-wrap gap-x-3 w-full">
+          <div class="flex flex-col flex-grow">
+            <label for="diagDate" accesskey="t">Da<u>t</u>e:</label>
+            <input
+              type="text"
+              id="diagDate"
+              x-model="result.diagDate"
+              class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+              readonly
+            />
+          </div>
+          <div class="flex flex-col flex-grow">
+            <label for="deviceName" accesskey="n">Device <u>N</u>ame:</label>
+            <input
+              type="text"
+              id="deviceName"
+              x-model="result.deviceName"
+              class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+              readonly
+            />
+          </div>
+          <div class="flex flex-col flex-grow">
+            <label for="deviceSerialNumber" accesskey="v"
+              >De<u>v</u>ice Serial #:</label
+            >
+            <input
+              type="text"
+              id="deviceSerialNumber"
+              x-model="result.deviceSerialNumber"
+              class="border border-gray-400 rounded px-2 py-1 bg-gray-100 text-gray-900 hover:border-blue-400 focus:outline-none focus:ring focus:ring-blue-500"
+              readonly
+            />
+          </div>
         </div>
+        <div class="overflow-x-auto border border-gray-400 rounded">
+          <table class="min-w-full bg-white">
+            <thead>
+              <tr class="bg-gray-100">
+                <th
+                  class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400"
+                >
+                  Test #
+                </th>
+                <th
+                  class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400"
+                >
+                  Sphere
+                </th>
+                <th
+                  class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400"
+                >
+                  Cylinder
+                </th>
+                <th
+                  class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400"
+                >
+                  Axis
+                </th>
+                <th
+                  class="py-2 px-2 text-left font-medium text-gray-800 tracking-wider border-b border-gray-400"
+                >
+                  Sph.Equi
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  colspan="5"
+                  class="py-2 text-gray-600 font-semibold text-center"
+                >
+                  Right Eye
+                </td>
+              </tr>
+              <template
+                x-for="reResult in result.rightEyeResults"
+                :key="reResult.testNumber"
+              >
+                <tr class="hover:bg-gray-100">
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="reResult.testNumber"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="reResult.sphere"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="reResult.cylinder"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="reResult.axis"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="reResult.sphericalEquivalent"
+                  ></td>
+                </tr>
+              </template>
+              <tr>
+                <td
+                  colspan="5"
+                  class="py-2 text-gray-600 font-semibold text-center"
+                >
+                  Left Eye
+                </td>
+              </tr>
+              <template
+                x-for="leResult in result.leftEyeResults"
+                :key="leResult.testNumber"
+              >
+                <tr class="hover:bg-gray-100">
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="leResult.testNumber"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="leResult.sphere"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="leResult.cylinder"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="leResult.axis"
+                  ></td>
+                  <td
+                    class="py-2 px-2 whitespace-nowrap border-b border-gray-400"
+                    x-text="leResult.sphericalEquivalent"
+                  ></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <style>
-        label {
-            font-weight: 500;
-            margin-bottom: 4px;
-            color: oklch(27.8% 0.033 256.848);
-        }
+      label {
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: oklch(27.8% 0.033 256.848);
+      }
     </style>
-</body>
+  </body>
 </html>
